@@ -1,115 +1,68 @@
-# Right Fit Finder (Live)
+# SystemFit — Real‑Time Team Fit Recommender
 
 *Players • Coaches • Coaching Staff — using current game data*
 
-**Status:** In development
-**Target start:** Winter Break 2025
-**Public demo:** Planned (Streamlit MVP)
+**Status:** In progress (starting Winter Break 2025)
+**Demo:** Streamlit MVP planned
+**Plan:** If it works well after testing, I’ll deploy it as a simple **cloud app** so the public can try it.
+
+---
+
+## Backstory (why this exists)
+
+I’m a **Liverpool** fan. Our biggest rivals are **Manchester United**. Over the last decade, United haven’t looked like the powerhouse they used to be. They’ve spent huge fees on players and hired famous coaches, but the results haven’t matched the investment. My take: it’s often a **fit** problem, not a talent problem.
+
+So I’m building **SystemFit**—a simple recommendation tool (powered by a small ML model) that picks people who actually **fit the team’s style right now**. I’ll start with **Manchester United** as the first case study, then make it easy to add other clubs later.
 
 ---
 
 ## What is this?
 
-Right Fit Finder helps a football club pick the **right people**—on and off the pitch—using **fresh, real-time match data**. It ranks **players**, and in later phases **coaches** and **coaching staff**, by how well they fit a club’s **role needs** and **playing style** right now (not last season).
+SystemFit is a personal project that helps a soccer club pick the **right people** for how they play **right now**. It starts with **players** and later can include **coaches** and **coaching staff**. The goal is to use **current match data (that's  integrating API instead of a static dataset which won't reflect real time scenarios or data)** to build a clear, up‑to‑date shortlist.
 
-For non-technical readers: think of it like smart hiring. The goal isn’t the biggest name—it’s the **best fit** for how your team actually plays *today*.
-
----
-
-## Why now?
-
-Clubs still make name-over-fit signings. Static spreadsheets go stale, miss injuries and form, and can leak future information into training. By pulling **live stats via APIs**, scoring **recent form** (last 6–10 matches), and using a transparent ranking approach, the app produces **faster, better shortlists** aligned to a club’s system and budget.
+**Simple idea:** big names aren’t always the best fit. This tool looks for **fit + form** and explains *why* a pick makes sense.
 
 ---
 
-## What the app will do
+## What it will do (MVP)
 
-### 1) Right Player Finder (MVP)
+* **Input:** Team + role (e.g., pressing forward, ball‑progressing CM) and basic constraints (budget, age, league).
+* **Output:** **Top‑10 list** with a simple **FitScore**, percentiles vs role peers, a small **recent‑form** trend, and a **“review”** zone for borderline cases.
 
-* **Input:** Team profile + role (e.g., *pressing forward*, *ball-progressing CM*), constraints (budget, age, league).
-* **Output:** **Top‑10 shortlist** with a **FitScore**, role‑peer percentiles, recent‑form sparkline, and a **“review” gray zone** for borderline cases.
-* **Why it helps:** Clear, up‑to‑date options with reasons—so decisions are quicker and less subjective.
+**Later:**
 
-### 2) Coach Fit (Phase 3)
-
-* **Idea:** Build a style profile for coaches from their teams’ historical patterns (pressing intensity, possession %, directness, build‑up).
-* **Output:** Match a coach’s style to a club profile and constraints.
-
-### 3) Coaching Staff Fit (Phase 4, exploratory)
-
-* **Idea:** Early signals from tenure, role specialism (set‑pieces, analysis), and networks.
-* **Note:** Data is sparse; treat as research and document limits.
+* **Coach Fit:** build a basic style card for coaches and match that to a club profile.
+* **Staff Fit:** early signals from role speciality and tenure (exploratory only).
 
 ---
 
 ## How it works
 
-1. **Fetch** fresh stats from public football APIs.
-2. **Compute** rolling performance (6–10 match windows), adjusted for minutes and league strength.
-3. **Compare** candidates to a club’s **team profile** (style + roles).
-4. **Score & rank** with a simple **FitScore**, plus explanations.
-5. **Flag** uncertain cases into a **gray‑zone** for human review.
+1. **Get fresh stats** from public football data sites (APIs).
+2. **Measure recent form** (last 6–10 games), adjusted for minutes and league strength.
+3. **Compare** each candidate to what the team needs (style + role).
+4. **Rank** them and show short, readable reasons.
+5. **Flag** uncertain cases to a **review zone** for a human to decide.
 
 ---
 
-## Tech at a glance (for engineers)
+## Why it’s useful
 
-* **Data sources:** API‑FOOTBALL / football‑data.org (live backbone), optional Understat xG (community libs), StatsBomb Open (static baseline).
-* **Storage:** Postgres or DuckDB with `as_of` timestamps; simple caching to manage API quotas.
-* **Features:** per‑90 stats, rolling windows, opponent strength, role usage, availability/injuries; league‑translation coefficients.
-* **Models:** k‑NN similarity + **learning‑to‑rank** (e.g., XGBoost/LightGBM) → single **FitScore**; sample‑size and league‑translation penalties; **gray‑zone** review band.
-* **App:** Streamlit (MVP) → FastAPI backend + Streamlit/Next.js frontend.
-* **Cloud:** Vercel (frontend) + Railway/Render (API) + Supabase/Neon (Postgres); nightly or post‑match refresh (GitHub Actions/CRON).
+* **Up‑to‑date:** updates after matches, so shortlists don’t go stale.
+* **Clear:** simple scores and small explanations anyone can read.
+* **Practical:** helps avoid “name over fit” signings.
 
 ---
 
-## Roadmap (Winter Break plan)
+## Plan / To‑Do (winter break)
 
-**Week 0 — Prep**
-
-* [ ] Set up repos, CI, env templates, logging, and error alerts.
-* [ ] Create team profile schema (JSON/YAML).
-
-**Week 1 — Data & Storage**
-
-* [ ] API clients (rate‑limit aware) + ingest scripts.
-* [ ] Postgres schema + `as_of` snapshots; first backfill.
-
-**Week 2 — Features & Baseline Ranking**
-
-* [ ] Rolling features (per‑90, opponent strength, recency weighting).
-* [ ] k‑NN similarity + baseline FitScore; penalties; gray‑zone rules.
-
-**Week 3 — MVP App**
-
-* [ ] Streamlit: inputs, Top‑10 table, explanations, sparklines.
-* [ ] “Last updated” banner; simple audit log.
-
-**Week 4 — Backtests & Public Demo**
-
-* [ ] Backtest on past windows; document wins/failures.
-* [ ] Deploy demo; write usage guide and responsible‑use notes.
-
-*Phase 3–4 are post‑MVP and scheduled after the public demo is stable.*
+* [ ] Write the data pull script (rate‑limit safe).
+* [ ] Build basic features and a first **FitScore**.
+* [ ] Make a simple **Streamlit** page (inputs, Top‑10, reasons, last‑updated).
+* [ ] Back‑test on a few past months and note where it worked/failed.
+* [ ] If results look good → **deploy a cloud demo** and share the link.
 
 ---
-
-## Getting started
-
-```bash
-# 1) setup
-python -m venv .venv && source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-
-# 2) config
-cp .env.example .env   # add your API keys
-
-# 3) build + run (MVP)
-python scripts/ingest.py
-python scripts/features.py
-python scripts/rank.py
-streamlit run app.py
-```
 
 **.env.example**
 
@@ -117,42 +70,24 @@ streamlit run app.py
 API_FOOTBALL_KEY=your_key_here
 FDATA_KEY=optional
 UNDERSTAT_OK=use_at_own_risk
-DATABASE_URL=postgresql://user:pass@localhost:5432/right_fit_finder
+DATABASE_URL=postgresql://user:pass@localhost:5432/systemfit
 ```
 
 ---
 
-## Responsible data & licensing
+## Cloud plan
 
-* **We do not redistribute** third‑party match/player data. Users fetch their own via API keys and accept provider terms.
-* **Code:** Apache‑2.0.
-* **Docs/diagrams:** optional CC BY 4.0 if you wish to allow reuse with attribution.
-* See `DATA_LICENSE.md` and `NOTICE` for details.
+If tests look good: **Streamlit on Vercel**, small API (optional), and a lightweight database (Neon/Supabase Postgres or DuckDB). Nightly or post‑match refresh.
 
 ---
 
-## Limitations (honest list)
+## Notes on data & license
 
-* Data quality varies by provider; injuries/availability can lag.
-* Role definitions can be ambiguous; we default to simple, explainable features.
-* API quotas may limit refresh frequency; caching and fallbacks are included.
-
----
-
-## Contributing
-
-PRs are welcome—especially team profiles (JSON), league coefficients, UI polish, and backtest ideas. See `CONTRIBUTING.md` for workflow.
+* I won’t redistribute third‑party match data. Users bring their own API keys and accept the provider’s terms.
+* **Code license:** Apache‑2.0.
 
 ---
 
-## FAQ
+## One‑liner for portfolio
 
-* **Is this “AI”?** Yes—simple, transparent ML ranks candidates and explains fit.
-* **Will it replace scouts?** No. It **augments** scouting with faster, clearer shortlists; humans still decide.
-* **Can it be wrong?** Yes. Hence a **gray‑zone** for review and ongoing monitoring.
-
----
-
-## Portfolio blurb 
-
-**Right Fit Finder (Live):** a tool that picks **players, coaches, and staff** who fit a team’s style using **current match data**. It updates after every match, explains **why** each pick fits, and flags risky choices for review—so clubs avoid name‑over‑fit signings and non‑experts can follow the logic.
+**SystemFit:** a personal, real‑time tool that ranks **players (and later coaches/staff)** for team fit using **current match data**, with a simple score and reasons anyone can understand.
