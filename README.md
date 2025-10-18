@@ -2,7 +2,7 @@
 
 *Players • Coaches • Coaching Staff — using current game data*
 
-**Status:** In progress (starting Winter Break 2025)
+**Status:** In progress (to be completed around Winter Break 2025)
 **Demo:** Streamlit MVP planned
 **Plan:** If it works well after testing, I’ll deploy it as a simple **cloud app** so the public can try it.
 
