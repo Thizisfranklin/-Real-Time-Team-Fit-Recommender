@@ -88,6 +88,6 @@ If tests look good: **Streamlit on Vercel**, small API (optional), and a lightwe
 
 ---
 
-## One‑liner for portfolio
+## One‑liner Summary
 
 **SystemFit:** a personal, real‑time tool that ranks **players (and later coaches/staff)** for team fit using **current match data**, with a simple score and reasons anyone can understand.
